@@ -69,6 +69,7 @@ void parse_file ( char * filename,
     if (strcmp(line,"line") == 0){
         char input[256];
         fgets(input,255,f);
+        input[strlen(input)-1]='\0';
         int x0,x1,y0,y1,z0,z1;
         sscanf(input,"%d %d %d %d %d %d",&x0,&y0,&z0,&x1,&y1,&z1);
         add_edge(edges,x0,y0,z0,x1,y1,z1);
@@ -79,6 +80,7 @@ void parse_file ( char * filename,
     if (strcmp(line,"scale") == 0){
         char input[256];
         fgets(input,255,f);
+        input[strlen(input)-1]='\0';
         double x,y,z;
         sscanf(input,"%lf %lf %lf",&x,&y,&z);
         matrix_mult(make_scale(x,y,z),transform);
@@ -86,6 +88,7 @@ void parse_file ( char * filename,
     if (strcmp(line,"move") == 0){
         char input[256];
         fgets(input,255,f);
+        input[strlen(input)-1]='\0';
         double x,y,z;
         sscanf(input,"%lf %lf %lf",&x,&y,&z);
         matrix_mult(make_translate(x,y,z),transform);
@@ -93,6 +96,7 @@ void parse_file ( char * filename,
     if (strcmp(line,"rotate") == 0){
         char input[256];
         fgets(input,255,f);
+        input[strlen(input)-1]='\0';
         char axis;
         double theta;
         sscanf(input,"%c %lf",&axis,&theta);
@@ -128,6 +132,7 @@ void parse_file ( char * filename,
         c.green = 125;
         char input[256];
         fgets(input,255,f);
+        input[strlen(input)-1]='\0';
         clear_screen(s);
         draw_lines(edges,s,c);
         save_extension(s,input);

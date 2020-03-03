@@ -13,10 +13,9 @@ int main(int argc, char **argv) {
   screen s;
   struct matrix * edges;
   struct matrix * transform;
-
+  createSpiralFile();
   edges = new_matrix(4, 4);
   transform = new_matrix(4, 4);
-
   if ( argc == 2 )
     parse_file( argv[1], transform, edges, s );
   else

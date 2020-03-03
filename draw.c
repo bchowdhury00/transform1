@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "ml6.h"
 #include "display.h"
@@ -70,21 +72,28 @@ void draw_lines( struct matrix * points, screen s, color c) {
 
 
 
-void sphereofArchimedes(double theta,double * nextX0, double * nextY0,double * nextX1, double * nextY1){
-    *nextX0 = theta * cos(theta);
-    *nextY0 = theta * sin(theta);
-    *nextX1 = (theta + .1) * cos(theta + .1);
-    *nextY1 = (theta + .1) * sin(theta + .1);
+void spiralofArchimedes(double theta,double * nextX0, double * nextY0,double * nextX1, double * nextY1){
+    *nextX0 = 2 * theta * cos(theta);
+    *nextY0 = 2 * theta * sin(theta);
+    *nextX1 = 2 * (theta + 1) * cos(theta + 1);
+    *nextY1 = 2 * (theta + 1) * sin(theta + 1);
     return;
 }
 
-void createSphereFile(){
-    //int fd = open("archi.txt",O_CREAT | O_RDWR, 0644);
+void createSpiralFile(){
+    int fd = open("archi",O_CREAT | O_RDWR, 0644);
     double theta = 0;
     double x0,x1,y0,y1;
-    while (theta < M_PI  * 2){
-        sphereofArchimedes(theta,&x0,&y0,&x1,&y1);
+    char line[256];
+    while (theta < 100){
+        spiralofArchimedes(theta,&x0,&y0,&x1,&y1);
+        sprintf(line,"line\n%d %d %d %d %d %d\n",(int)x0,(int)y0 ,0,(int)x1 ,(int)y1,0);
+        write(fd,line,strlen(line));
+        theta += 1;
     }
+    char * end = "ident\nmove\n250 250 100\napply\nsave\nspiral.png\nquit\n";
+    write(fd,end,strlen(end));
+    close(fd);
 }
 
 void draw_line(int x0, int y0, int x1, int y1, screen s, color c) {
